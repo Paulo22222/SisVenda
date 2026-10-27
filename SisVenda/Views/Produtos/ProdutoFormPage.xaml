@@ -9,6 +9,7 @@
             <Entry x:Name="precoEntry" Placeholder="Preço *" Keyboard="Numeric" />
             <Editor x:Name="descricaoEditor" Placeholder="Descrição" AutoSize="TextChanges" HeightRequest="100" />
             <Entry x:Name="quantidadeEntry" Placeholder="Quantidade *" Keyboard="Numeric" />
+            <Entry x:Name="codigoEntry" Placeholder="Código *" />                                                                               
 
             <HorizontalStackLayout Spacing="10">
                 <Button Text="Salvar" Clicked="Salvar_Clicked" />

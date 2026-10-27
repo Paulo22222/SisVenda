@@ -8,6 +8,8 @@ namespace SisVenda.Models
         public string? Descricao { get; set; }
         public int Quantidade { get; set; }
 
+        public string? Codigo { get; set; }
+
         public string PrecoFormatado => Preco.ToString("C2");
     }
 }

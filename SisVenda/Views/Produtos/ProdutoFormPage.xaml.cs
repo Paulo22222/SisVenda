@@ -46,6 +46,7 @@ namespace SisVenda
 
         private async void Salvar_Clicked(object sender, EventArgs e)
         {
+            var codigo = codigoEntry.Text?.Trim ();
             var nome = nomeEntry.Text?.Trim();
             var descricao = descricaoEditor.Text?.Trim();
 
@@ -76,6 +77,7 @@ namespace SisVenda
                     p.Preco = preco;
                     p.Descricao = descricao;
                     p.Quantidade = quantidade;
+                    p.Codigo = codigo;
                 }
             }
             else
@@ -86,7 +88,8 @@ namespace SisVenda
                     Nome = nome,
                     Preco = preco,
                     Descricao = descricao,
-                    Quantidade = quantidade
+                    Quantidade = quantidade,
+                    Codigo = codigo
                 };
                 ProdutoRepository.Add(novo);
             }
@@ -111,6 +114,7 @@ namespace SisVenda
 
         void PopulateForm(Produto p)
         {
+            codigoEntry.Text = p.Codigo;
             nomeEntry.Text = p.Nome;
             precoEntry.Text = p.Preco.ToString("F2", new CultureInfo("pt-BR"));
             descricaoEditor.Text = p.Descricao;
