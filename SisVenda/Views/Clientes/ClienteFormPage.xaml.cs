@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.Maui.Controls;
 using SisVenda.Models;
 using SisVenda.Services;
@@ -11,12 +12,7 @@ namespace SisVenda
     public partial class ClienteFormPage : ContentPage
     {
         int clientId = 0;
-        readonly Dictionary<string, List<string>> stateCities = new()
-        {
-            { "Estado Alpha", new List<string>{ "Alpha City 1","Alpha City 2","Alpha City 3", "Paracatu" } },
-            { "Estado Beta", new List<string>{ "Beta City 1","Beta City 2","Beta City 3" } },
-            { "Estado Gama", new List<string>{ "Gama City 1","Gama City 2","Gama City 3" } }
-        };
+        readonly Dictionary<string, List<string>> stateCities = new();
 
         public string ClientId
         {
@@ -33,12 +29,27 @@ namespace SisVenda
         public ClienteFormPage()
         {
             InitializeComponent();
+        }
+
+        async Task CarregarEstados()
+        {
+            if (stateCities.Count > 0) return;
+            using var stream = await FileSystem.OpenAppPackageFileAsync("estados-cidades.json");
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+            var dados = JsonSerializer.Deserialize<EstadosCidades>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (dados is null) return;
+            foreach (var e in dados.Estados.OrderBy(x => x.Nome))
+            {
+                stateCities[e.Nome!] = e.Cidades;
+            }
             estadoPicker.ItemsSource = stateCities.Keys.ToList();
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await CarregarEstados();
             if (clientId > 0)
             {
                 var c = ClienteRepository.GetById(clientId);
